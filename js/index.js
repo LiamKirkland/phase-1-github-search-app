@@ -221,7 +221,6 @@ function fetchData(pageNum) {
       .then((results) => {
         displayResults(results.items, mode)
         queryDiv.innerHTML = `${results.total_count} results for <b>${keyword}</b>.`
-        maxPages = getPages(Math.ceil(results.total_count / 15))
       })
   }
 }
