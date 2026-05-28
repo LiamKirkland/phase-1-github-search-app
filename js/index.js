@@ -1,4 +1,4 @@
-const baseURL = "https://api.github.com/search/users"
+const baseURL = "https://api.github.com/"
 
 document.addEventListener("DOMContentLoaded", () => {
   const searchForm = document.getElementById("github-form")
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const keywordDiv = document.getElementById("keywordBold")
     // console.log(new FormData(e.target))
     if (keyword != "" && keyword != undefined) {
-      fetch(baseURL + `?q=${keyword}`, {
+      fetch(baseURL + `search/users?q=${keyword}&per_page=15`, {
         method: "GET",
         headers: {
           Accept: "application/vnd.github.v3+json",
@@ -38,20 +38,58 @@ function displayResults(results, type) {
 
     for (result of results) {
       const resultLi = document.createElement("li")
-      const resultCard = document.createElement('div')
+      const resultCard = document.createElement("div")
       const resultPFP = document.createElement("img")
-      const resultUser = document.createElement('p')
-      const resultURL = document.createElement('a')
+      const resultUser = document.createElement("p")
+      const resultURL = document.createElement("a")
 
-      
       resultPFP.src = result.avatar_url
-      resultPFP.alt = 'User Profile Picture'
-      resultCard.id = 'resultCard'
+      resultPFP.alt = "User Profile Picture"
+      resultCard.classList.add("resultCard")
       resultUser.textContent = result.login
       resultURL.textContent = "Profile Link"
       resultURL.href = result.html_url
+      resultURL.target = "_blank"
+      resultURL.rel = "noopener noreferrer"
 
       resultCard.append(resultPFP, resultUser, resultURL)
+      resultCard.id = result.login
+      resultCard.addEventListener("click", (e) => {
+        const repoLi = document.createElement("li")
+        const repoCard = document.createElement("div")
+        const repoName = document.createElement("p")
+        const repoCreatedAt = document.createElement("p")
+        const repoCommits = document.createElement("p")
+        const repoBranches = document.createElement("p")
+        const repoURL = document.createElement("a")
+
+        const fetchRepoData = async () => {
+          try {
+            const [userData, repoData] =
+              await Promise.all([
+                fetch(baseURL + `users/${resultCard.id}`, {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/vnd.github.v3+json",
+                  },
+                }),
+                fetch(baseURL + `users/${resultCard.id}/repos`, {
+                  method: "GET",
+                  headers: {
+                    Accept: "application/vnd.github.v3+json",
+                  },
+                })
+              ])
+
+            const repoQuery = document.getElementById("repoQuery")
+            repoQuery.innerHTML = `<b>${resultCard.id}</b> has ${userData.public_repos} repositories.`
+
+            
+          } catch (err) {
+            console.error(err)
+          }
+        }
+      })
       resultLi.append(resultCard)
 
       userList.append(resultLi)
