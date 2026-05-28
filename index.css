@@ -29,7 +29,7 @@
 #user-list li {
   width: 17%;
   min-width: 220px;
-  display: flex;          /* makes the inner card stretch */
+  display: flex;
   align-items: stretch;
 }
 
@@ -96,8 +96,8 @@
   padding: 15px;
   border: medium solid;
   border-radius: 5px;
-  width: 100%;            /* fill the li */
-  box-sizing: border-box; /* include border + padding in the width */
+  width: 100%;
+  box-sizing: border-box;
   gap: 6px;
 }
 

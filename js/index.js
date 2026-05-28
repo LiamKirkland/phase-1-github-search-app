@@ -3,8 +3,6 @@ let page = 1
 let maxPages = 1
 
 document.addEventListener("DOMContentLoaded", () => {
-
-
   const searchForm = document.getElementById("github-form")
   const searchBar = document.querySelector('input[name="search"]')
   const submitBtn = document.querySelector('input[name="submit"]')
@@ -78,7 +76,7 @@ function displayResults(results, type) {
     const userList = document.getElementById("user-list")
     userList.replaceChildren()
 
-    for (result of results) {
+    for (const result of results) {
       const resultLi = document.createElement("li")
       const resultCard = document.createElement("div")
       const resultPFP = document.createElement("img")
@@ -122,7 +120,7 @@ function displayResults(results, type) {
             const repoQuery = document.getElementById("repoQuery")
             repoQuery.innerHTML = `<b>${resultCard.id}</b> has ${userData.public_repos} repositories.`
 
-            for (repo of repoData) {
+            for (const repo of repoData) {
               const repoLi = document.createElement("li")
               const repoCard = document.createElement("div")
               const repoName = document.createElement("p")
