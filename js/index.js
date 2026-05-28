@@ -66,8 +66,6 @@ document.addEventListener("DOMContentLoaded", () => {
           queryDiv.innerHTML = `${results.total_count} results for <b>${keyword}</b>.`
           maxPages = getPages(Math.ceil(results.total_count / 15))
           page = 1
-
-          e.target.reset()
         })
     }
   })
