@@ -30,6 +30,10 @@
   width: 17%;
 }
 
+#repos-list {
+  list-style: none;
+}
+
 .resultCard {
   display: flex;
   flex-direction: column;
