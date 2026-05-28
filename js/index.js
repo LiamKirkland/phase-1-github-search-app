@@ -49,7 +49,7 @@ function displayResults(results, type) {
       resultCard.id = 'resultCard'
       resultUser.textContent = result.login
       resultURL.textContent = "Profile Link"
-      resultURL.href = result.url
+      resultURL.href = result.html_url
 
       resultCard.append(resultPFP, resultUser, resultURL)
       resultLi.append(resultCard)

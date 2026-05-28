@@ -2,12 +2,44 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100vw;
 }
 
 #github-container {
   display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 ul {
+  display: flex;
+  flex-wrap: wrap;
   list-style: none;
+  gap: 10px
+}
+
+li {
+  width: 17%;
+}
+
+#resultCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  border: medium solid;
+  max-width: 230px;
+}
+
+#resultCard img {
+  max-height: 200px;
+  max-width: 200px;
+}
+
+#resultCard p {
+
+}
+
+#resultCard a {
+
 }
