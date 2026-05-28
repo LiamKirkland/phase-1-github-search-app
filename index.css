@@ -28,6 +28,9 @@
 
 #user-list li {
   width: 17%;
+  min-width: 220px;
+  display: flex;          /* makes the inner card stretch */
+  align-items: stretch;
 }
 
 #repos-list {
@@ -93,7 +96,9 @@
   padding: 15px;
   border: medium solid;
   border-radius: 5px;
-  max-width: 230px;
+  width: 100%;            /* fill the li */
+  box-sizing: border-box; /* include border + padding in the width */
+  gap: 6px;
 }
 
 .resultCard img {
@@ -106,5 +111,5 @@
 }
 
 .resultCard a {
-
+  margin-top: auto;
 }

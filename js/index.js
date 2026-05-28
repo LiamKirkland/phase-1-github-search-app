@@ -1,10 +1,17 @@
 const baseURL = "https://api.github.com/"
+let page = 1
+let maxPages = 1
 
 document.addEventListener("DOMContentLoaded", () => {
+
+
   const searchForm = document.getElementById("github-form")
   const searchBar = document.querySelector('input[name="search"]')
   const submitBtn = document.querySelector('input[name="submit"]')
   const modeBtn = document.getElementById("searchToggle")
+  const backBtn = document.getElementById("backBtn")
+  const forwardBtn = document.getElementById("forwardBtn")
+  const pageSelector = document.getElementById("pageSelector")
 
   modeBtn.addEventListener("click", () => {
     if (submitBtn.value.slice(7) == "Users") {
@@ -16,6 +23,30 @@ document.addEventListener("DOMContentLoaded", () => {
   //only allow alpha-numeric/hyphen inputs
   searchBar.addEventListener("input", (e) => {
     e.target.value = e.target.value.replace(/[^a-zA-Z0-9\-]/g, "")
+  })
+
+  pageSelector.addEventListener('change', e => {
+    page = e.target.value
+    fetchData(page)
+    pageSelector.value = page
+  })
+
+  backBtn.addEventListener("click", () => {
+    if (page > 1) {
+      console.log('ran')
+      page--
+      fetchData(page)
+      pageSelector.value = page
+    }
+  })
+
+  forwardBtn.addEventListener("click", () => {
+    if (page + 1 <= maxPages) {
+      console.log('ran')
+      page++
+      fetchData(page)
+      pageSelector.value = page
+    }
   })
 
   searchForm.addEventListener("submit", (e) => {
@@ -35,6 +66,8 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((results) => {
           displayResults(results.items, mode)
           queryDiv.innerHTML = `${results.total_count} results for <b>${keyword}</b>.`
+          maxPages = getPages(Math.ceil(results.total_count / 15))
+          page = 1
         })
     }
   })
@@ -126,6 +159,10 @@ function displayResults(results, type) {
   if (type == "repositories") {
     const userList = document.getElementById("user-list")
     userList.replaceChildren()
+    const repoList = document.getElementById("repos-list")
+    repoList.replaceChildren()
+    const repoQuery = document.getElementById("repoQuery")
+    repoQuery.textContent = ""
 
     for (const result of results) {
       const repoLi = document.createElement("li")
@@ -149,5 +186,42 @@ function displayResults(results, type) {
 
       userList.append(repoLi)
     }
+  }
+}
+
+function getPages(allPages) {
+  const pageSelector = document.getElementById("pageSelector")
+  const pageOptions = []
+  for (let i = 1; i <= allPages; i++) {
+    const pageOption = document.createElement("option")
+    pageOption.value = i
+    pageOption.textContent = i
+
+    pageOptions.push(pageOption)
+  }
+
+  pageSelector.replaceChildren(...pageOptions)
+  return allPages
+}
+
+function fetchData(pageNum) {
+  const keyword = new FormData(document.getElementById('github-form')).get("search")
+  const queryDiv = document.getElementById("queryDiv")
+  const keywordDiv = document.getElementById("keywordBold")
+  const submitBtn = document.querySelector('input[name="submit"]')
+  const mode = submitBtn.value.slice(7).toLowerCase()
+  if (keyword != "" && keyword != undefined) {
+    fetch(`${baseURL}search/${mode}?q=${keyword}&per_page=15&page=${pageNum}`, {
+      method: "GET",
+      headers: {
+        Accept: "application/vnd.github.v3+json",
+      },
+    })
+      .then((res) => res.json())
+      .then((results) => {
+        displayResults(results.items, mode)
+        queryDiv.innerHTML = `${results.total_count} results for <b>${keyword}</b>.`
+        maxPages = getPages(Math.ceil(results.total_count / 15))
+      })
   }
 }
